@@ -1,0 +1,13 @@
+{
+  "name": "studio-tod-routing",
+  "version": "0.0.0",
+  "dependencies": {
+    "moment-timezone": "^0.5.31"
+  },
+  "devDependencies": {
+    "twilio-run": "^2.6.0"
+  },
+  "engines": {
+    "node": "10"
+  }
+}
