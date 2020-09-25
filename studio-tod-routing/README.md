@@ -51,5 +51,3 @@ Deploy your function with the [Twilio CLI](https://www.twilio.com/docs/twilio-cl
 ```
 twilio serverless:deploy
 ```
-
-After deploying, copy the deployment URL with the webhook path (something along the lines of: https://stripe-sms-receipt-1234-dev.twil.io/send-sms-receipt) and create a live webhook endpoint [in your Stripe dashboard](https://stripe.com/docs/webhooks/setup#configure-webhook-settings).
