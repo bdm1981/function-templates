@@ -2,6 +2,8 @@
 
 This function provides provides time of day routing with timezone and holiday support.
 
+![studio-screenshot.png](./studio_example/studio-screenshot.png)
+
 ## How to use the template
 
 The best way to use the Function templates is through the Twilio CLI as described below. If you'd like to use the template without the Twilio CLI, [check out our usage docs](../docs/USING_FUNCTIONS.md).
@@ -50,4 +52,24 @@ Deploy your function with the [Twilio CLI](https://www.twilio.com/docs/twilio-cl
 
 ```
 twilio serverless:deploy
+```
+
+## Function parameters
+
+| Variable         | Meaning                                                                                   | Required | Default           |
+| :--------------- | :---------------------------------------------------------------------------------------- | :------- | :---------------- |
+| `openClosedTime` | Comma separated string representing open/closed hours and minutes. Example: "08:00,17:00" | No       | "00:00,23:59"     |
+| `timezone`       | Timezone to be used                                                                       | No       | "America/Chicago" |
+
+### Function Output
+
+The function will return the following JSON object
+
+```JSON
+{
+  "isOpen": true,
+  "holiday": false,
+  "open": "8:00 AM",
+  "closed": "5:00 PM",
+}
 ```

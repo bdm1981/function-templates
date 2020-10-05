@@ -1,0 +1,148 @@
+{
+  "description": "A New Flow",
+  "states": [
+    {
+      "name": "Trigger",
+      "type": "trigger",
+      "transitions": [
+        {
+          "event": "incomingMessage"
+        },
+        {
+          "next": "Business_Hours",
+          "event": "incomingCall"
+        },
+        {
+          "event": "incomingRequest"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    },
+    {
+      "name": "OpenMenu",
+      "type": "gather-input-on-call",
+      "transitions": [
+        {
+          "event": "keypress"
+        },
+        {
+          "event": "speech"
+        },
+        {
+          "event": "timeout"
+        }
+      ],
+      "properties": {
+        "voice": "Polly.Salli",
+        "speech_timeout": "auto",
+        "offset": {
+          "x": -60,
+          "y": 850
+        },
+        "loop": 1,
+        "finish_on_key": "#",
+        "say": "Thanks for calling, How can I help you today?",
+        "language": "en-US",
+        "stop_gather": true,
+        "gather_language": "en",
+        "profanity_filter": "true",
+        "timeout": 5
+      }
+    },
+    {
+      "name": "Business_Hours",
+      "type": "run-function",
+      "transitions": [
+        {
+          "next": "isOpen",
+          "event": "success"
+        },
+        {
+          "event": "fail"
+        }
+      ],
+      "properties": {
+        "service_sid": "ZS",
+        "environment_sid": "ZE",
+        "offset": {
+          "x": 90,
+          "y": 270
+        },
+        "function_sid": "ZH",
+        "parameters": [
+          {
+            "value": "\"00:00,05:00\"",
+            "key": "hours"
+          }
+        ],
+        "url": "/business-hours/businessHours"
+      }
+    },
+    {
+      "name": "isOpen",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "event": "noMatch"
+        },
+        {
+          "next": "OpenMenu",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to true",
+              "arguments": ["{{widgets.Business_Hours.parsed.isOpen}}"],
+              "type": "equal_to",
+              "value": "true"
+            }
+          ]
+        },
+        {
+          "next": "ClosedMenu",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to false",
+              "arguments": ["{{widgets.Business_Hours.parsed.isOpen}}"],
+              "type": "equal_to",
+              "value": "false"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.Business_Hours.parsed.isOpen}}",
+        "offset": {
+          "x": 20,
+          "y": 510
+        }
+      }
+    },
+    {
+      "name": "ClosedMenu",
+      "type": "say-play",
+      "transitions": [
+        {
+          "event": "audioComplete"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 360,
+          "y": 850
+        },
+        "loop": 1,
+        "say": "We are currently closed"
+      }
+    }
+  ],
+  "initial_state": "Trigger",
+  "flags": {
+    "allow_concurrent_calls": true
+  }
+}
